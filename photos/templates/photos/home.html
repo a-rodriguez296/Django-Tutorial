@@ -6,5 +6,19 @@
 </head>
 <body>
     <h1>Bienvenido a Frikr</h1>
+    <p>Frikr es como Flick pero en friki</p>
+
+    {% if photos_list|length > 0 %}
+
+    <h2>Últimas fotos publicadas</h2>
+
+
+    {% for photo in photos_list %}
+        <img src="{{ photo.url }}" alt="{{ photo.name }}" height="150">
+    {% endfor %}
+    {% else %}
+     <h2>Publica la primera foto</h2>
+    {% endif %}
+
 </body>
 </html>
