@@ -24,5 +24,8 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
 
     #para el request vacio (r'^$') busca en el paquete photos.views.home
-    url(r'^$', 'photos.views.home')
+    url(r'^$', 'photos.views.home'),
+
+    #(?P<pk>) significa capturar el valor que llega para luego usarlo con el nombre pk
+    url(r'^photos/(?P<pk>[0-9]+)$', 'photos.views.detail')
 ]
