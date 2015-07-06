@@ -1,10 +1,17 @@
 <!DOCTYPE html>
-<html>
-<head lang="en">
+<html lang="en">
+<head>
     <meta charset="UTF-8">
-    <title>Detalle de Foto</title>
+    <title>{{ photo.name }}</title>
 </head>
 <body>
-    <h1>Detalle de Foto</h1>
+    <h1>{{ photo.name }}</h1>
+    <img src="{{ photo.url }}" alt = "{{ photo.name }}" height="300">
+    <p>{{ photo.description }}</p>
+    <p>
+        <strong>Autor:</strong>
+        {{ photo.owner.first_name }}
+        {{ photo.owner.last_name }}
+    </p>
 </body>
 </html>

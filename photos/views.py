@@ -1,7 +1,7 @@
 #esto es para que acepte acentos
 #-*- coding: utf-8 -*-
-#esto realmente son los controladores, razón por la cual acá no debe ir nada de la presentación
 
+#esto realmente son los controladores, razón por la cual acá no debe ir nada de la presentación
 
 from django.http import *
 from django.shortcuts import render
@@ -27,5 +27,4 @@ def detail(request, pk):
         context = {'photo' : photo}
         return render(request, 'photos/detail.html', context)
     else:
-        return HttpResponseNotFound()
-
+        return HttpResponseNotFound("No existe dicha foto")
