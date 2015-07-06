@@ -1,10 +1,7 @@
-<!DOCTYPE html>
-<html lang="es">
-<head >
-    <meta charset="UTF-8">
-    <title>Bienvenido a Flickr, pero en Friki</title>
-</head>
-<body>
+{% extends 'base.html' %}
+
+
+{% block section  %}
     <h1>Bienvenido a Frikr</h1>
     <p>Frikr es como Flick pero en friki</p>
 
@@ -22,6 +19,5 @@
     {% else %}
      <h2>Publica la primera foto</h2>
     {% endif %}
+{% endblock %}
 
-</body>
-</html>
