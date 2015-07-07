@@ -8,7 +8,7 @@ from django.shortcuts import render
 from photos.models import Photo, PUBLIC
 from photos.forms import PhotoForm
 from django.core.urlresolvers import reverse
-from django.contrib.auth.decorators import login_requiered
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 
@@ -33,7 +33,7 @@ def detail(request, pk):
         return HttpResponseNotFound("No existe dicha foto")
 
 
-@login_requiered
+@login_required
 def create(request):
 
 
