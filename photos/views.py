@@ -7,6 +7,7 @@ from django.http import *
 from django.shortcuts import render
 from photos.models import Photo, PUBLIC
 from photos.forms import PhotoForm
+from django.core.urlresolvers import reverse
 
 # Create your views here.
 
@@ -32,14 +33,26 @@ def detail(request, pk):
 
 def create(request):
 
+    success_message = ''
     if request.method == 'GET':
         form = PhotoForm()
     elif request.method == 'POST':
         form = PhotoForm(request.POST)
         if form.is_valid():
             new_photo = form.save() #Guarda el objeto que viene en el formulario y lo devuelve
+
+            #Poner todos los campos vacíos
+            form = PhotoForm()
+
+            success_message = 'Guardado con exito!'
+
+            #reverse sirve para generar la url
+            success_message += '<a href="{0}">'.format(reverse('photo_detail', args=[new_photo.pk]))
+            success_message += 'Ver Foto'
+            success_message += '</a>'
     context = {
-            'form': form
+        'form': form,
+        'success_message': success_message
     }
     return render(request, 'photos/new_photo.html', context)
 
