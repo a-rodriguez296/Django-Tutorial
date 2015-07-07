@@ -2,12 +2,13 @@
 
 from django.shortcuts import render, redirect
 from django.contrib.auth import logout as django_logout, authenticate, login as django_login
+from users.forms import LoginForm
 
 # Create your views here.
 
 
 def login(request):
-
+    form = LoginForm()
     error_messages = []
 
     if request.method == 'POST':
@@ -28,7 +29,8 @@ def login(request):
                 error_messages.append('El usuario no esta activo')
 
     context = {
-        'errors' : error_messages
+        'errors': error_messages,
+        'login_form': form
     }
     return render(request, 'users/login.html', context)
 
