@@ -2,6 +2,5 @@
 from django import forms
 
 class LoginForm(forms.Form):
-
-    usr = forms.CharField()
-    pwd = forms.CharField()
+    usr = forms.CharField(label="Nombre de Usuario")
+    pwd = forms.CharField(label="Contraseña", widget=forms.PasswordInput())

@@ -6,6 +6,7 @@
 from django.http import *
 from django.shortcuts import render
 from photos.models import Photo, PUBLIC
+from photos.forms import PhotoForm
 
 # Create your views here.
 
@@ -28,3 +29,17 @@ def detail(request, pk):
         return render(request, 'photos/detail.html', context)
     else:
         return HttpResponseNotFound("No existe dicha foto")
+
+def create(request):
+
+    if request.method == 'GET':
+        form = PhotoForm()
+    elif request.method == 'POST':
+        form = PhotoForm(request.POST)
+        if form.is_valid():
+            new_photo = form.save() #Guarda el objeto que viene en el formulario y lo devuelve
+    context = {
+            'form': form
+    }
+    return render(request, 'photos/new_photo.html', context)
+

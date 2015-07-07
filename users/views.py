@@ -8,26 +8,30 @@ from users.forms import LoginForm
 
 
 def login(request):
-    form = LoginForm()
+
     error_messages = []
 
     if request.method == 'POST':
+        form = LoginForm(request.POST)
 
-        #forma segura de acceder a claves en un diccionario. Nunca acceder a un diccionario con la sintaxis de corchetes. POST['usr']
-        username = request.POST.get('usr')
-        password = request.POST.get('pwd')
+        if form.is_valid():
+            #forma segura de acceder a claves en un diccionario. Nunca acceder a un diccionario con la sintaxis de corchetes. POST['usr']
+            username = form.cleaned_data.get('usr')
+            password = form.cleaned_data.get('pwd')
 
-        user = authenticate (username = username, password = password)
+            user = authenticate (username = username, password = password)
 
-        if user is None:
-            error_messages.append('Nombre de usuario o contraseña incorrecto')
-        else:
-            if user.is_active:
-                django_login(request, user)
-                return redirect('photos_home')
+            if user is None:
+                error_messages.append('Nombre de usuario o contraseña incorrecto')
             else:
-                error_messages.append('El usuario no esta activo')
+                if user.is_active:
+                    django_login(request, user)
+                    return redirect('photos_home')
+                else:
+                    error_messages.append('El usuario no esta activo')
 
+    else:
+        form = LoginForm()
     context = {
         'errors': error_messages,
         'login_form': form

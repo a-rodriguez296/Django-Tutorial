@@ -28,7 +28,7 @@ urlpatterns = [
 
     #(?P<pk>) significa capturar el valor que llega para luego usarlo con el nombre pk
     url(r'^photos/(?P<pk>[0-9]+)$', 'photos.views.detail', name='photo_detail'),
-
+    url(r'^photos/new$', 'photos.views.create', name = 'create_photo'),
 
 
     #Users URLS
