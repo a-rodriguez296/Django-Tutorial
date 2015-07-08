@@ -10,6 +10,7 @@ from photos.forms import PhotoForm
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.views.generic import View
+from django.utils.decorators import method_decorator
 
 # Create your views here.
 class HomeView(View):
@@ -18,6 +19,7 @@ class HomeView(View):
         # trae solo las primeras dos fotos
         context = {'photos_list': photos[:2]}
         return render(request, 'photos/home.html', context)
+
 
 class DetailView(View):
     def get(self, request, pk):
@@ -35,13 +37,23 @@ class DetailView(View):
             return HttpResponseNotFound("No existe dicha foto")
 
 
-@login_required
-def create(request):
+class CreateView(View):
 
-    success_message = ''
-    if request.method == 'GET':
+    def render(self, request, context):
+        return render(request, 'photos/new_photo.html', context)
+
+
+    @method_decorator(login_required())
+    def get(self, request):
+        #Mostrar el formulario para crear la foto
         form = PhotoForm()
-    elif request.method == 'POST':
+        context = {
+            'form': form,
+        }
+        return self.render(request, context)
+
+    @method_decorator(login_required())
+    def post(self, request):
 
         #Crea una instancia vacía de foto
         photo_with_owner = Photo()
@@ -62,9 +74,9 @@ def create(request):
             success_message += '<a href="{0}">'.format(reverse('photo_detail', args=[new_photo.pk]))
             success_message += 'Ver Foto'
             success_message += '</a>'
-    context = {
-        'form': form,
-        'success_message': success_message
-    }
-    return render(request, 'photos/new_photo.html', context)
+        context = {
+            'form': form,
+            'success_message': success_message
+        }
+        return self.render(request, context)
 
