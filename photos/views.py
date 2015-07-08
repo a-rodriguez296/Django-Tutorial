@@ -55,13 +55,13 @@ class DetailView(View):
             return HttpResponseNotFound("No existe dicha foto")
 
 
-class CreateView(OnlyAuthenticatedView):
+class CreateView(View):
 
     def render(self, request, context):
         return render(request, 'photos/new_photo.html', context)
 
 
-
+    @method_decorator(login_required())
     def get(self, request):
 
         if super(CreateView, self).get(request):
@@ -75,34 +75,31 @@ class CreateView(OnlyAuthenticatedView):
         else:
             return redirect('users_login')
 
-
+    @method_decorator(login_required())
     def post(self, request):
 
-        if super(CreateView, self).post(request):
-            #Crea una instancia vacía de foto
-            photo_with_owner = Photo()
+        #Crea una instancia vacía de foto
+        photo_with_owner = Photo()
 
-            #Asigna los datos
-            photo_with_owner.owner = request.user
+        #Asigna los datos
+        photo_with_owner.owner = request.user
 
-            form = PhotoForm(request.POST, instance=photo_with_owner)
-            if form.is_valid():
-                new_photo = form.save() #Guarda el objeto que viene en el formulario y lo devuelve
+        form = PhotoForm(request.POST, instance=photo_with_owner)
+        if form.is_valid():
+            new_photo = form.save() #Guarda el objeto que viene en el formulario y lo devuelve
 
-                #Poner todos los campos vacíos
-                form = PhotoForm()
+            #Poner todos los campos vacíos
+            form = PhotoForm()
 
-                success_message = 'Guardado con exito!'
+            success_message = 'Guardado con exito!'
 
-                #reverse sirve para generar la url
-                success_message += '<a href="{0}">'.format(reverse('photo_detail', args=[new_photo.pk]))
-                success_message += 'Ver Foto'
-                success_message += '</a>'
-            context = {
-                'form': form,
-                'success_message': success_message
-            }
-            return self.render(request, context)
-        else:
-            return redirect('users_login')
+            #reverse sirve para generar la url
+            success_message += '<a href="{0}">'.format(reverse('photo_detail', args=[new_photo.pk]))
+            success_message += 'Ver Foto'
+            success_message += '</a>'
+        context = {
+            'form': form,
+            'success_message': success_message
+        }
+        return self.render(request, context)
 
