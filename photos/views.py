@@ -19,8 +19,8 @@ def home(request):
     return render(request, 'photos/home.html', context)
 
 def detail(request, pk):
-    # Carga el detalle de una foto
-    possible_photos = Photo.objects.filter( id = pk)
+    # Carga el detalle de una foto y ademas trae el owner de la foto. Esto es para no hacer 2 consultas separadas sino una.
+    possible_photos = Photo.objects.filter( id = pk).select_related('owner')
 
     # photo = len(possible_photos) == 1 ? possible_photos[0] : None
     photo = possible_photos[0] if len(possible_photos) == 1 else None
