@@ -14,6 +14,19 @@ from django.utils.decorators import method_decorator
 from django.db.models import Q
 
 
+class PhotosQuerySet(object):
+
+    def get_photos_queryset(self,request):
+        if not request.user.is_authenticated():
+            photos = Photo.objects.filter(visibility=PUBLIC)
+        elif request.user.is_superuser:
+            photos = Photo.objects.all()
+        else:
+            #Con esta libreria (Q) se pueden hacer busquedas complejas en SQL
+            photos = Photo.objects.filter(Q(owner=request.user) | Q(visibility=PUBLIC))
+        return photos
+
+
 # Create your views here.
 class HomeView(View):
     def get(self, request):
@@ -40,10 +53,10 @@ class OnlyAuthenticatedView(View):
             return False
 
 
-class DetailView(View):
+class DetailView(View, PhotosQuerySet):
     def get(self, request, pk):
         # Carga el detalle de una foto y ademas trae el owner de la foto. Esto es para no hacer 2 consultas separadas sino una.
-        possible_photos = Photo.objects.filter( id = pk).select_related('owner')
+        possible_photos = self.get_photos_queryset(request).filter(pk=pk).select_related('owner')
 
         # photo = len(possible_photos) == 1 ? possible_photos[0] : None
         photo = possible_photos[0] if len(possible_photos) == 1 else None
@@ -105,26 +118,13 @@ class CreateView(View):
         return self.render(request, context)
 
 
-class ListView(View):
+class ListView(View, PhotosQuerySet):
 
     def get(self, request):
 
-        #retorna fotos publiclas si un usuario no esta autenticado
-        #retorna mis fotos y publicas si estoy autenticado
-        #retorna todas las fotos si soy super-user
-
-        if not request.user.is_authenticated():
-            photos = Photo.objects.filter(visibility=PUBLIC)
-        elif request.user.is_superuser:
-            photos = Photo.objects.all()
-        else:
-            #Con esta libreria (Q) se pueden hacer busquedas complejas en SQL
-            photos = Photo.objects.filter(Q(owner=request.user) | Q(visibility=PUBLIC))
-
-        #Relacion con otra tabla
         #photos = Photo.objects.filter(owner__first_name='Albert')
 
         context = {
-            'photos_list': photos
+            'photos_list': self.get_photos_queryset(request)
         }
         return render(request, 'photos/photos_list.html', context)
