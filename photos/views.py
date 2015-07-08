@@ -36,12 +36,18 @@ def detail(request, pk):
 @login_required
 def create(request):
 
-
     success_message = ''
     if request.method == 'GET':
         form = PhotoForm()
     elif request.method == 'POST':
-        form = PhotoForm(request.POST)
+
+        #Crea una instancia vacía de foto
+        photo_with_owner = Photo()
+
+        #Asigna los datos
+        photo_with_owner.owner = request.user
+
+        form = PhotoForm(request.POST, instance=photo_with_owner)
         if form.is_valid():
             new_photo = form.save() #Guarda el objeto que viene en el formulario y lo devuelve
 
