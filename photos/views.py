@@ -9,7 +9,7 @@ from photos.models import Photo, PUBLIC
 from photos.forms import PhotoForm
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
-from django.views.generic import View
+from django.views.generic import View, ListView
 from django.utils.decorators import method_decorator
 from django.db.models import Q
 
@@ -118,7 +118,7 @@ class CreateView(View):
         return self.render(request, context)
 
 
-class ListView(View, PhotosQuerySet):
+class PhotoListView(View, PhotosQuerySet):
 
     def get(self, request):
 
@@ -128,3 +128,13 @@ class ListView(View, PhotosQuerySet):
             'photos_list': self.get_photos_queryset(request)
         }
         return render(request, 'photos/photos_list.html', context)
+
+
+class UserPhotosView(ListView):
+
+    model = Photo
+    template_name = 'photos/user_photos.html'
+
+    def get_queryset(self):
+        queryset = super(UserPhotosView, self).get_queryset()
+        return queryset.filter(owner=self.request.user)
