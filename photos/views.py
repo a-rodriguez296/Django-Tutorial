@@ -78,16 +78,12 @@ class CreateView(View):
     @method_decorator(login_required())
     def get(self, request):
 
-        if super(CreateView, self).get(request):
-
-            #Mostrar el formulario para crear la foto
-            form = PhotoForm()
-            context = {
-                'form': form,
-            }
-            return self.render(request, context)
-        else:
-            return redirect('users_login')
+        #Mostrar el formulario para crear la foto
+        form = PhotoForm()
+        context = {
+            'form': form,
+        }
+        return self.render(request, context)
 
     @method_decorator(login_required())
     def post(self, request):

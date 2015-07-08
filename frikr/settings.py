@@ -139,3 +139,4 @@ LICENSES = (
 
 #Se pone la u delante de la palabra para que la palabra sea vista como un unicode
 PROJECT_BADWORDS = [u'Malparido']
+
