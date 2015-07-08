@@ -19,19 +19,20 @@ class HomeView(View):
         context = {'photos_list': photos[:2]}
         return render(request, 'photos/home.html', context)
 
-def detail(request, pk):
-    # Carga el detalle de una foto y ademas trae el owner de la foto. Esto es para no hacer 2 consultas separadas sino una.
-    possible_photos = Photo.objects.filter( id = pk).select_related('owner')
+class DetailView(View):
+    def get(self, request, pk):
+        # Carga el detalle de una foto y ademas trae el owner de la foto. Esto es para no hacer 2 consultas separadas sino una.
+        possible_photos = Photo.objects.filter( id = pk).select_related('owner')
 
-    # photo = len(possible_photos) == 1 ? possible_photos[0] : None
-    photo = possible_photos[0] if len(possible_photos) == 1 else None
+        # photo = len(possible_photos) == 1 ? possible_photos[0] : None
+        photo = possible_photos[0] if len(possible_photos) == 1 else None
 
-    if photo is not None:
-        #Cargar l plantilla de detalla
-        context = {'photo' : photo}
-        return render(request, 'photos/detail.html', context)
-    else:
-        return HttpResponseNotFound("No existe dicha foto")
+        if photo is not None:
+            #Cargar l plantilla de detalla
+            context = {'photo' : photo}
+            return render(request, 'photos/detail.html', context)
+        else:
+            return HttpResponseNotFound("No existe dicha foto")
 
 
 @login_required
