@@ -9,14 +9,15 @@ from photos.models import Photo, PUBLIC
 from photos.forms import PhotoForm
 from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
+from django.views.generic import View
 
 # Create your views here.
-
-def home(request):
-    photos = Photo.objects.filter(visibility = PUBLIC).order_by('-created_at')
-    # trae solo las primeras dos fotos
-    context = {'photos_list': photos[:2]}
-    return render(request, 'photos/home.html', context)
+class HomeView(View):
+    def get(self, request):
+        photos = Photo.objects.filter(visibility = PUBLIC).order_by('-created_at')
+        # trae solo las primeras dos fotos
+        context = {'photos_list': photos[:2]}
+        return render(request, 'photos/home.html', context)
 
 def detail(request, pk):
     # Carga el detalle de una foto y ademas trae el owner de la foto. Esto es para no hacer 2 consultas separadas sino una.

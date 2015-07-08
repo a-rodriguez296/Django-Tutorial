@@ -19,12 +19,14 @@ Including another URLconf
 
 from django.conf.urls import include, url
 from django.contrib import admin
+from photos.views import HomeView
+from users.views import LoginView, LogoutView
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
 
     #para el request vacio (r'^$') busca en el paquete photos.views.home
-    url(r'^$', 'photos.views.home', name='photos_home'),
+    url(r'^$', HomeView.as_view(), name='photos_home'),
 
     #(?P<pk>) significa capturar el valor que llega para luego usarlo con el nombre pk
     url(r'^photos/(?P<pk>[0-9]+)$', 'photos.views.detail', name='photo_detail'),
@@ -32,6 +34,6 @@ urlpatterns = [
 
 
     #Users URLS
-    url(r'^login$', 'users.views.login', name='users_login'),
-    url(r'^logout$', 'users.views.logout', name='users_logout')
+    url(r'^login$', LoginView.as_view(), name='users_login'),
+    url(r'^logout$', LogoutView.as_view(), name='users_logout')
 ]
