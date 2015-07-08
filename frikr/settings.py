@@ -130,3 +130,9 @@ LOGGING = {
 
 #Login URL
 LOGIN_URL = '/login' # esto sirve para que cuando un usuario no este autenticado , lo rediriga a /login
+
+
+LICENSES = (
+    ('QUE', 'Quentin Tarantino'),
+    ('DSH', 'Donald Trump')
+)
