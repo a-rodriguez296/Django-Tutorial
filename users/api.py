@@ -2,14 +2,13 @@
 __author__ = 'arodriguez'
 
 
-from django.views.generic import View
 from django.contrib.auth.models import User
 from users.serializers import UserSerializer
-from rest_framework.renderers import JSONRenderer
-from django.http import HttpResponse
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 
-class UserListAPI(View):
+class UserListAPI(APIView):
 
     def get(self, request):
         users = User.objects.all()
@@ -17,12 +16,4 @@ class UserListAPI(View):
         #Cuando se le pasa una coleccion a serializer hay que poner many=true
         serializer = UserSerializer(users, many=True)
 
-        serialized_users = serializer.data
-
-        #instanciar renderizador de JSON
-        renderer = JSONRenderer()
-
-        #Convertir users a formato JSON
-        json_users = renderer.render(serialized_users)
-
-        return HttpResponse(json_users)
+        return Response(serializer.data)
