@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+
+{% block section  %}
+    <h1>Listado de Fotos</h1>
+
+    {% if photos_list|length > 0 %}
+
+    <!--
+    Para que se haga el mapeo de lo que viene en el contexto las variables deben tener el mismo nombre.
+    Por ejemplo en el views hay photo_list, entonces en el html del include también se debe llamar igual
+    Si queremos llamarlo diferente podemos hacer
+    {% include 'photos/photos_loop.html' with photo_list=photos  %}
+    -->
+     {% include 'photos/photos_loop.html' %}
+
+
+    {% else %}
+     <h2>Publica la primera foto</h2>
+    {% endif %}
+{% endblock %}

@@ -11,6 +11,7 @@ from django.core.urlresolvers import reverse
 from django.contrib.auth.decorators import login_required
 from django.views.generic import View
 from django.utils.decorators import method_decorator
+from django.db.models import Q
 
 
 # Create your views here.
@@ -103,3 +104,27 @@ class CreateView(View):
         }
         return self.render(request, context)
 
+
+class ListView(View):
+
+    def get(self, request):
+
+        #retorna fotos publiclas si un usuario no esta autenticado
+        #retorna mis fotos y publicas si estoy autenticado
+        #retorna todas las fotos si soy super-user
+
+        if not request.user.is_authenticated():
+            photos = Photo.objects.filter(visibility=PUBLIC)
+        elif request.user.is_superuser:
+            photos = Photo.objects.all()
+        else:
+            #Con esta libreria (Q) se pueden hacer busquedas complejas en SQL
+            photos = Photo.objects.filter(Q(owner=request.user) | Q(visibility=PUBLIC))
+
+        #Relacion con otra tabla
+        #photos = Photo.objects.filter(owner__first_name='Albert')
+
+        context = {
+            'photos_list': photos
+        }
+        return render(request, 'photos/photos_list.html', context)
