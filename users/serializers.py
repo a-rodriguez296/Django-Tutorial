@@ -32,4 +32,3 @@ class UserSerializer(serializers.Serializer):
         instance.save()
 
         return instance
-
