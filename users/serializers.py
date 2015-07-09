@@ -32,3 +32,12 @@ class UserSerializer(serializers.Serializer):
         instance.save()
 
         return instance
+
+    #como se usa validate+campo en data ya viene el valor. Si solo fuera validate vendría todo en un diccionario.
+    def validate_username(self, data):
+
+        users = User.objects.filter(username=data)
+        if len(users) > 0:
+            raise serializers.ValidationError("Ya existe un usuario con ese username")
+        else:
+            return data
