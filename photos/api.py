@@ -27,6 +27,9 @@ class PhotoListApi(ListCreateAPIView, PhotosQuerySet):
         #implementar las politicas de queryset para mostrar fotos
         return self.get_photos_queryset(self.request)
 
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.owner)
+
 
 class PhotoDetailApi(RetrieveUpdateDestroyAPIView, PhotosQuerySet):
     queryset = Photo.objects.all()

@@ -10,9 +10,12 @@ class PhotoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Photo
 
+        #esto no entiendo muy bien para que es
+        read_only_fields = ('owner', )
+
 
 class PhotoListSerializer(PhotoSerializer):
 
     #Para que se herede la clase Meta hay que hacer esto.
     class Meta(PhotoSerializer.Meta):
-        fields = ('id', 'name','url')
+        fields = ('id', 'name', 'url')
