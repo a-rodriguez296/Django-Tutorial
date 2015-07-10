@@ -1,10 +1,8 @@
 #-*- coding: utf-8 -*-
 __author__ = 'arodriguez'
 
-from rest_framework.views import APIView
 from photos.models import Photo
 from photos.serializers import PhotoSerializer, PhotoListSerializer
-from rest_framework.response import Response
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 
 class PhotoListApi(ListCreateAPIView):
