@@ -2,11 +2,14 @@
 __author__ = 'arodriguez'
 
 from photos.models import Photo
+from photos.views import PhotosQuerySet
 from photos.serializers import PhotoSerializer, PhotoListSerializer
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
-class PhotoListApi(ListCreateAPIView):
+
+
+class PhotoListApi(ListCreateAPIView, PhotosQuerySet):
 
     queryset = Photo.objects.all()
     permission_classes = (IsAuthenticatedOrReadOnly,)
@@ -19,8 +22,18 @@ class PhotoListApi(ListCreateAPIView):
         """
         return PhotoSerializer if self.request.method == "POST" else PhotoListSerializer
 
+    def get_queryset(self):
 
-class PhotoDetailApi(RetrieveUpdateDestroyAPIView):
+        #implementar las politicas de queryset para mostrar fotos
+        return self.get_photos_queryset(self.request)
+
+
+class PhotoDetailApi(RetrieveUpdateDestroyAPIView, PhotosQuerySet):
     queryset = Photo.objects.all()
     serializer_class = PhotoSerializer
     permission_classes = (IsAuthenticatedOrReadOnly,)
+
+    def get_queryset(self):
+
+        #implementar las politicas de queryset para mostrar fotos
+        return self.get_photos_queryset(self.request)
