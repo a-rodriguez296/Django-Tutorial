@@ -138,3 +138,9 @@ LICENSES = (
 #Se pone la u delante de la palabra para que la palabra sea vista como un unicode
 PROJECT_BADWORDS = [u'Malparido']
 
+
+REST_FRAMEWORK = {
+    'PAGINATE_BY': 2,    # Items por pagina
+    'PAGINATE_BY_PARAM': 'page_size',  # Parametro get para definir el numero de elemento s por pagina
+    'MAX_PAGINATE_BY': 10  # maximo numero de elementos por página
+}
